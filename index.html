@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Погода в Алматы</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #e0f7fa;
+            text-align: center;
+            padding: 20px;
+        }
+        .weather {
+            background: #ffffff;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            width: 300px;
+        }
+        h1 {
+            color: #00796b;
+        }
+        .temp {
+            font-size: 2em;
+            color: #d32f2f;
+        }
+        .details {
+            color: #455a64;
+        }
+    </style>
+</head>
+<body>
+    <h1>Погода в Алматы</h1>
+    <div class="weather">
+        <p id="status">Загрузка...</p>
+        <p id="temperature" class="temp"></p>
+        <p id="feels_like" class="details"></p>
+        <p id="humidity" class="details"></p>
+    </div>
+
+    <script>
+        async function getWeather() {
+            const response = await fetch('http://127.0.0.1:5000/api/weather');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.error) {
+                    document.getElementById('status').innerText = data.error;
+                } else {
+                    document.getElementById('status').innerText = data.condition;
+                    document.getElementById('temperature').innerText = `Температура: ${data.temperature} °C`;
+                    document.getElementById('feels_like').innerText = `Ощущается как: ${data.feels_like} °C`;
+                    document.getElementById('humidity').innerText = `Влажность: ${data.humidity}%`;
+                }
+            } else {
+                document.getElementById('status').innerText = 'Ошибка при загрузке данных';
+            }
+        }
+
+        getWeather();
+    </script>
+</body>
+</html>
